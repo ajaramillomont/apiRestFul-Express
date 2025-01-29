@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+  postgresqlv2:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=store
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=ANDres1988
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  pgadminv2:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=puco1988@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=14s24n000
+    ports:
+      - 6060:80
+    networks:
+      - app_network
+
+  nodejsv2:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app_network
+    depends_on:
+      - postgresqlv2
+
+networks:
+  app_network:
+    driver: bridge
